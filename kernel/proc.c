@@ -145,7 +145,9 @@ found:
   memset(&p->context, 0, sizeof(p->context));
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
-
+  
+  p->mask = 0;
+  
   return p;
 }
 
@@ -310,6 +312,8 @@ fork(void)
 
   safestrcpy(np->name, p->name, sizeof(p->name));
 
+  np->mask = p->mask;
+  
   pid = np->pid;
 
   release(&np->lock);
@@ -686,3 +690,16 @@ procdump(void)
     printf("\n");
   }
 }
+
+uint64
+proc_count()
+{
+    uint64 cnt = 0;
+    struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++){
+        if(p->state!=UNUSED)
+          cnt++;
+    }
+    return cnt;
+}
+

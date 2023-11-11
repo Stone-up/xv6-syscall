@@ -1,0 +1,6 @@
+kernel/trap.c:usertrap
+7，我们所调用的系统调用索引
+user mode
+lw s2,0(zero) s2
+访问了地址0x0，失败
+initcode 1
